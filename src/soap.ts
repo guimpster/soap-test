@@ -55,14 +55,14 @@ export class SoapServer {
     };
 
     // do something when app is closing
-    process.on('exit', exitHandler.bind(null, { cleanup: true }));
+    process.on('exit', exitHandler.bind(this, { cleanup: true }));
 
     // catches ctrl+c event
-    process.on('SIGINT', exitHandler.bind(null, { exit: true }));
+    process.on('SIGINT', exitHandler.bind(this, { exit: true }));
 
     // catches "kill pid" (for example: nodemon restart)
-    process.on('SIGUSR1', exitHandler.bind(null, { exit: true }));
-    process.on('SIGUSR2', exitHandler.bind(null, { exit: true }));
+    process.on('SIGUSR1', exitHandler.bind(this, { exit: true }));
+    process.on('SIGUSR2', exitHandler.bind(this, { exit: true }));
 
     // catches uncaught exceptions
     // process.on('uncaughtException', exitHandler.bind(null, { exit: true }));
@@ -77,8 +77,16 @@ export class SoapServer {
       response.end('404: Not Found: ' + request.url);
     });
 
-    return new Promise((resolve, reject) => {
-      this.server.listen(this.port, (error) => {
+    return new Promise((resolve, reject) => { 
+
+      soap.listen(this.server, '/wsdl', this.services, this.xml);
+      this.server.listen(this.port, null, null, (error) => {
+        console.log('Data: ', {
+          server: this.server,
+          services: this.services,
+          port: this.port,
+          xml: this.xml
+        })
         if (error) {
           console.error('Unable to listen on port', this.port, error);
           reject(error);
@@ -88,7 +96,6 @@ export class SoapServer {
         console.log(`🚀  Server ready at http://localhost:${this.port}/wsdl`);
         resolve();
       });
-      soap.listen(this.server, '/wsdl', this.services, this.xml);
     });
   };
 }

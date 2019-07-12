@@ -1,5 +1,7 @@
 import { SoapClient, SoapServer } from './soap';
 
+const port = 6000;
+
 const testWebClient = async () => {
   try {
     const soap = new SoapClient({
@@ -45,14 +47,28 @@ const testServer = async () => {
 
   const wsdlFile = 'myservice.wsdl';
 
-  const server = new SoapServer({ services, wsdlFile, port: 8089 });
+  const server = new SoapServer({ services, wsdlFile, port });
   return server.start();
 };
 
-const testClient = () => {
+const testClient = async () => {
+  try {
+    const soap = new SoapClient({
+      url: `http://localhost:${port}/wsdl`,
+    });
 
+    console.log('Methods: ', await soap.getMethods());
+
+    const { result } = await soap.call('MyFunction', {
+      name: 'G]agsd',
+    });
+
+    console.log('Result: \n' + JSON.stringify(result));
+  } catch (e) {
+    console.error('Error: ', e);
+  }
 };
 
 testWebClient()
   .then(testServer)
-  .then(testClient);
+  // .then(testClient);
