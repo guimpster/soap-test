@@ -1,0 +1,39 @@
+{
+  "name": "@kapmug/authentication",
+  "version": "1.0.0",
+  "author": "KapMuG",
+  "license": "ISC",
+  "typings": "build/src/index.d.ts",
+  "main": "build/src/index.js",
+  "scripts": {
+    "dev": "concurrently --kill-others --names \"tsc,node\" -c \"blue,green\" \"yarn tsc --noEmit --pretty --watch\" \"yarn nodemon --watch 'src/**/*.ts' --ignore 'src/**/*.spec.ts' --exec 'ts-node' src/index.ts\"",
+    "lint:ts": "tslint './**/*.ts{,x}'",
+    "build": "yarn tsc --pretty && yarn copy:static",
+    "copy:static": "copyfiles -u 1 ./src/adapters/**/*.proto build/"
+  },
+  "dependencies": {
+    "bcrypt": "^3.0.6",
+    "grpc": "^1.17.0",
+    "jsonwebtoken": "^8.5.1",
+    "kafkajs": "^1.8.0",
+    "moment": "^2.22.2",
+    "node-bitlyapi": "^0.4.0",
+    "ramda": "^0.26.1",
+    "strong-soap": "^1.20.0"
+  },
+  "devDependencies": {
+    "@types/node": "^10.12.15",
+    "concurrently": "^4.1.0",
+    "copyfiles": "^2.1.0",
+    "nodemon": "^1.18.9",
+    "prettier": "^1.15.3",
+    "ts-node": "^7.0.1",
+    "tslint": "^5.11.0",
+    "tslint-config-prettier": "^1.17.0",
+    "tslint-plugin-prettier": "^2.0.1",
+    "typescript": "^3.4"
+  },
+  "resolve": {
+    "node-pre-gyp": "0.12.0"
+  }
+}
