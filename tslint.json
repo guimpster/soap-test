@@ -13,6 +13,7 @@
     "prettier": true,
     "no-console": false,
     "variable-name": [true, "allow-leading-underscore"],
+    "max-classes-per-file": [false, 1],
     "ordered-imports": false,
     "no-submodule-imports": false,
     "object-literal-sort-keys": false,

@@ -1,20 +1,58 @@
-import Soap from './soap';
+import { SoapClient, SoapServer } from './soap';
 
-const main = async () => {
+const testWebClient = async () => {
   try {
-    const soap = new Soap({ url: 'http://ws.cdyne.com/ip2geo/ip2geo.asmx?wsdl' });
-  
+    const soap = new SoapClient({
+      url: 'http://ws.cdyne.com/ip2geo/ip2geo.asmx?wsdl',
+    });
+
     console.log('Methods: ', await soap.getMethods());
-  
+
     const { result } = await soap.call('ResolveIP', {
       ipAddress: '177.95.228.97',
-      licenseKey: ''
+      licenseKey: '',
     });
-  
+
     console.log('Result: \n' + JSON.stringify(result));
-  } catch(e) {
+  } catch (e) {
     console.error('Error: ', e);
   }
 };
 
-main();
+const testServer = async () => {
+  const services = {
+    MyService: {
+      MyPort: {
+        MyFunction: ({ name }) => ({ name }),
+
+        // This is how to define an asynchronous function.
+        MyAsyncFunction: ({ name }, callback) => callback({ name }),
+
+        // This is how to receive incoming headers
+        HeadersAwareFunction: (args, cb, { Token: name }) => ({ name }),
+
+        // You can also inspect the original `req`
+        reallyDetailedFunction: (args, cb, { Token: name }, req) => {
+          console.log(
+            'SOAP `reallyDetailedFunction` request from ' +
+              req.connection.remoteAddress,
+          );
+          return { name };
+        },
+      },
+    },
+  };
+
+  const wsdlFile = 'myservice.wsdl';
+
+  const server = new SoapServer({ services, wsdlFile, port: 8089 });
+  return server.start();
+};
+
+const testClient = () => {
+
+};
+
+testWebClient()
+  .then(testServer)
+  .then(testClient);

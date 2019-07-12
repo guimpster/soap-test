@@ -1,0 +1,97 @@
+
+<?xml version="1.0" encoding ="utf-8"?>
+<!-- 
+KapMug
+2019-07-12
+This is a wsdl for testing soap server capabilities.
+
+Online WSDL 1.1 SOAP generator 0.2
+Julien Blitte
+ -->
+<definitions name="This is a wsdl for testing soap server capabilities."
+	targetNamespace="soaptest.kapmug.com.br.wsdl"
+	xmlns:tns="soaptest.kapmug.com.br.wsdl"
+	xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	xmlns:xsd1="soaptest.kapmug.com.br.xsd"
+	xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"
+	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+	xmlns="http://schemas.xmlsoap.org/wsdl/">
+<!-- definition of datatypes -->
+	<types>
+	<schema targetNamespace="soaptest.kapmug.com.br.xsd" xmlns="http://www.w3.org/2000/10/XMLSchema">
+		<element name="name">
+		<complexType><all><element name="value" type="string" /></all></complexType>
+		</element>
+		<element name="void">
+		<complexType><sequence></sequence></complexType>
+		</element>
+	</schema>
+	</types>
+<!-- response messages -->
+	<message name='returns_name'>
+	<part name='name' type='xsd:name'/>
+	</message>
+<!-- request messages -->
+	<message name='MyFunction'>
+	<part name='name' type='xsd:name'/>
+	</message>
+	<message name='MyAsyncFunction'>
+	<part name='name' type='xsd:name'/>
+	</message>
+	<message name='HeadersAwareFunction'>
+	<part name='void' type='xsd:void'/>
+	</message>
+	<message name='reallyDetailedFunction'>
+	<part name='void' type='xsd:void'/>
+	</message>
+<!-- server's services -->
+	<portType name='MyService'>
+		<operation name='MyFunction'>
+		<input message='tns:MyFunction'/>
+		<output message='tns:returns_name'/>
+		</operation>
+		<operation name='MyAsyncFunction'>
+		<input message='tns:MyAsyncFunction'/>
+		<output message='tns:returns_name'/>
+		</operation>
+		<operation name='HeadersAwareFunction'>
+		<input message='tns:HeadersAwareFunction'/>
+		<output message='tns:returns_name'/>
+		</operation>
+		<operation name='reallyDetailedFunction'>
+		<input message='tns:reallyDetailedFunction'/>
+		<output message='tns:returns_name'/>
+		</operation>
+	</portType>
+<!-- server encoding -->
+	<binding name='MyService_webservices' type='tns:MyService'>
+	<soap:binding style='rpc' transport='http://schemas.xmlsoap.org/soap/http'/>
+		<operation name='MyFunction'>
+		<soap:operation soapAction='urn:xmethods-delayed-quotes#MyFunction'/>
+		<input><soap:body use='encoded' namespace='urn:xmethods-delayed-quotes' encodingStyle='http://schemas.xmlsoap.org/soap/encoding/'/></input>
+		<output><soap:body use='encoded' namespace='urn:xmethods-delayed-quotes' encodingStyle='http://schemas.xmlsoap.org/soap/encoding/'/></output>
+		</operation>
+		<operation name='MyAsyncFunction'>
+		<soap:operation soapAction='urn:xmethods-delayed-quotes#MyAsyncFunction'/>
+		<input><soap:body use='encoded' namespace='urn:xmethods-delayed-quotes' encodingStyle='http://schemas.xmlsoap.org/soap/encoding/'/></input>
+		<output><soap:body use='encoded' namespace='urn:xmethods-delayed-quotes' encodingStyle='http://schemas.xmlsoap.org/soap/encoding/'/></output>
+		</operation>
+		<operation name='HeadersAwareFunction'>
+		<soap:operation soapAction='urn:xmethods-delayed-quotes#HeadersAwareFunction'/>
+		<input><soap:body use='encoded' namespace='urn:xmethods-delayed-quotes' encodingStyle='http://schemas.xmlsoap.org/soap/encoding/'/></input>
+		<output><soap:body use='encoded' namespace='urn:xmethods-delayed-quotes' encodingStyle='http://schemas.xmlsoap.org/soap/encoding/'/></output>
+		</operation>
+		<operation name='reallyDetailedFunction'>
+		<soap:operation soapAction='urn:xmethods-delayed-quotes#reallyDetailedFunction'/>
+		<input><soap:body use='encoded' namespace='urn:xmethods-delayed-quotes' encodingStyle='http://schemas.xmlsoap.org/soap/encoding/'/></input>
+		<output><soap:body use='encoded' namespace='urn:xmethods-delayed-quotes' encodingStyle='http://schemas.xmlsoap.org/soap/encoding/'/></output>
+		</operation>
+	</binding>
+<!-- access to service provider -->
+	<service name='MyPort'>
+	<port name='MyPort_0' binding='MyService_webservices'>
+	<soap:address location='http://127.0.0.1:8000/wsdl'/>
+	</port>
+	</service>
+</definitions>
